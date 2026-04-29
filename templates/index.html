@@ -6,15 +6,13 @@
     <title>Weather App</title>
 
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
             font-family: Arial, sans-serif;
             background: #0f0f0f;
-            color: #ffffff;
+            color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -28,8 +26,8 @@
             border-radius: 12px;
             width: 100%;
             max-width: 400px;
-            box-shadow: 0 0 25px rgba(0,0,0,0.6);
             text-align: center;
+            box-shadow: 0 0 25px rgba(0,0,0,0.6);
         }
 
         h1 {
@@ -38,24 +36,25 @@
         }
 
         form {
-            display: flex;
-            gap: 10px;
+            position: relative;
         }
 
         input {
-            flex: 1;
+            width: 100%;
             padding: 10px;
-            border: none;
             border-radius: 6px;
+            border: none;
             background: #2a2a2a;
             color: white;
             outline: none;
         }
 
         button {
-            padding: 10px 15px;
-            border: none;
+            margin-top: 10px;
+            width: 100%;
+            padding: 10px;
             border-radius: 6px;
+            border: none;
             background: #4da6ff;
             color: white;
             cursor: pointer;
@@ -65,37 +64,37 @@
             background: #3399ff;
         }
 
+        /* suggestion dropdown */
+        #suggestions {
+            list-style: none;
+            padding: 0;
+            margin: 5px 0 0 0;
+            background: #1a1a1a;
+            border-radius: 6px;
+            position: absolute;
+            width: 100%;
+            z-index: 10;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        #suggestions li {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        #suggestions li:hover {
+            background: #333;
+        }
+
         .result {
             margin-top: 20px;
             text-align: left;
         }
 
-        .result p {
-            margin: 6px 0;
-        }
-
         .error {
             color: #ff4d4d;
-            margin-top: 15px;
-        }
-
-        /* 📱 MOBILE */
-        @media (max-width: 480px) {
-            .container {
-                padding: 20px;
-            }
-
-            h1 {
-                font-size: 18px;
-            }
-
-            form {
-                flex-direction: column;
-            }
-
-            button {
-                width: 100%;
-            }
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -105,7 +104,8 @@
     <h1>🌤 Weather</h1>
 
     <form method="POST">
-        <input name="kota" placeholder="Masukkan kota..." required>
+        <input id="kota" name="kota" placeholder="Masukkan kota..." autocomplete="off" required>
+        <ul id="suggestions"></ul>
         <button type="submit">Cek</button>
     </form>
 
@@ -123,5 +123,38 @@
     {% endif %}
 </div>
 
+<script>
+const input = document.getElementById("kota");
+const suggestions = document.getElementById("suggestions");
+
+input.addEventListener("input", async () => {
+    const query = input.value;
+
+    if (query.length < 2) {
+        suggestions.innerHTML = "";
+        return;
+    }
+
+    try {
+        const res = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${query}&limit=5&appid=58b1f3086105a30639a60822d010dff5`);
+        const data = await res.json();
+
+        suggestions.innerHTML = "";
+
+        data.forEach(city => {
+            const li = document.createElement("li");
+            li.textContent = `${city.name}, ${city.country}`;
+            li.onclick = () => {
+                input.value = city.name;
+                suggestions.innerHTML = "";
+            };
+            suggestions.appendChild(li);
+        });
+    } catch (err) {
+        console.log(err);
+    }
+});
+</script>
+
 </body>
-  </html>
+</html> 
