@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f0f0f;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: #1a1a1a;
+            padding: 25px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 0 25px rgba(0,0,0,0.6);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        form {
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: #2a2a2a;
+            color: white;
+            outline: none;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            background: #4da6ff;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #3399ff;
+        }
+
+        .result {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .result p {
+            margin: 6px 0;
+        }
+
+        .error {
+            color: #ff4d4d;
+            margin-top: 15px;
+        }
+
+        /* 📱 MOBILE */
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 18px;
+            }
+
+            form {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🌤 Weather</h1>
+
+    <form method="POST">
+        <input name="kota" placeholder="Masukkan kota..." required>
+        <button type="submit">Cek</button>
+    </form>
+
+    {% if cuaca %}
+        {% if cuaca.error %}
+            <p class="error">{{ cuaca.error }}</p>
+        {% else %}
+            <div class="result">
+                <p><strong>Kota:</strong> {{ cuaca.kota }}</p>
+                <p><strong>Suhu:</strong> {{ cuaca.temp }}°C</p>
+                <p><strong>Kondisi:</strong> {{ cuaca.weather }}</p>
+                <p><strong>Kelembapan:</strong> {{ cuaca.humidity }}%</p>
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+
+</body>
+  </html>
