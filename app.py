@@ -11,8 +11,7 @@ api_pepet = os.getenv("WEATHER_API_KEY")
 @app.route('/api/suggestions')
 def suggestions():
     query = request.args.get('q', '')
-    api_key = os.getenv("WEATHER_API_KEY")
-    res = requests.get(f'https://api.openweathermap.org/geo/1.0/direct?q={query}&limit=5&appid={api_key}')
+    res = requests.get(f'https://api.openweathermap.org/geo/1.0/direct?q={query}&limit=5&appid={api_pepet}')
     return jsonify(res.json())
 
 
