@@ -2,7 +2,7 @@ import requests
 import os
 from dotenv import load_dotenv
 load_dotenv()
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 
 app = Flask(__name__)
 
@@ -12,8 +12,6 @@ api_pepet = os.getenv("WEATHER_API_KEY")
 def suggestions():
     query = request.args.get('q', '')
     api_key = os.getenv("WEATHER_API_KEY")
-    
-    import requests
     res = requests.get(f'https://api.openweathermap.org/geo/1.0/direct?q={query}&limit=5&appid={api_key}')
     return jsonify(res.json())
 
