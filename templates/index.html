@@ -1,175 +1,177 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Weather App</title>
 
     <style>
-        * { box-sizing: border-box; }
+      * {
+        box-sizing: border-box;
+      }
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #0f0f0f;
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #0f0f0f;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
 
-        .container {
-            background: #1a1a1a;
-            padding: 25px;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 0 25px rgba(0,0,0,0.6);
-        }
+      .container {
+        background: #1a1a1a;
+        padding: 25px;
+        border-radius: 12px;
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+      }
 
-        h1 {
-            margin-bottom: 20px;
-            font-size: 22px;
-        }
+      h1 {
+        margin-bottom: 20px;
+        font-size: 22px;
+      }
 
-        form {
-            position: relative;
-        }
+      form {
+        position: relative;
+      }
 
-        input {
-            width: 100%;
-            padding: 10px;
-            border-radius: 6px;
-            border: none;
-            background: #2a2a2a;
-            color: white;
-            outline: none;
-        }
+      input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: none;
+        background: #2a2a2a;
+        color: white;
+        outline: none;
+      }
 
-        button {
-            margin-top: 10px;
-            width: 100%;
-            padding: 10px;
-            border-radius: 6px;
-            border: none;
-            background: #4da6ff;
-            color: white;
-            cursor: pointer;
-        }
+      button {
+        margin-top: 10px;
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: none;
+        background: #4da6ff;
+        color: white;
+        cursor: pointer;
+      }
 
-        button:hover {
-            background: #3399ff;
-        }
+      button:hover {
+        background: #3399ff;
+      }
 
-        /* suggestion dropdown */
-        #suggestions {
-            list-style: none;
-            padding: 0;
-            margin: 5px 0 0 0;
-            background: #1a1a1a;
-            border-radius: 6px;
-            position: absolute;
-            width: 100%;
-            z-index: 10;
-            max-height: 150px;
-            overflow-y: auto;
-        }
+      /* suggestion dropdown */
+      #suggestions {
+        list-style: none;
+        padding: 0;
+        margin: 5px 0 0 0;
+        background: #1a1a1a;
+        border-radius: 6px;
+        position: absolute;
+        width: 100%;
+        z-index: 10;
+        max-height: 150px;
+        overflow-y: auto;
+      }
 
-        #suggestions li {
-            padding: 8px;
-            cursor: pointer;
-        }
+      #suggestions li {
+        padding: 8px;
+        cursor: pointer;
+      }
 
-        #suggestions li:hover {
-            background: #333;
-        }
+      #suggestions li:hover {
+        background: #333;
+      }
 
-        .result {
-            margin-top: 20px;
-            text-align: left;
-        }
+      .result {
+        margin-top: 20px;
+        text-align: left;
+      }
 
-        .error {
-            color: #ff4d4d;
-            margin-top: 10px;
-        }
+      .error {
+        color: #ff4d4d;
+        margin-top: 10px;
+      }
     </style>
-</head>
-    <style>
-.credit-left {
-    position: fixed;
-    bottom: 10px;
-    left: 15px;
-    font-size: 12px;
-    color: #777;
-    font-family: Arial, sans-serif;
-    z-index: 999;
-}
-</style>
+  </head>
+  <style>
+    .credit-left {
+      position: fixed;
+      bottom: 10px;
+      left: 15px;
+      font-size: 12px;
+      color: #777;
+      font-family: Arial, sans-serif;
+      z-index: 999;
+    }
+  </style>
 
-<div class="credit-left">
-    © 2026 — Credit by Ouroboros (Adrian)
-</div>
-<body>
+  <div class="credit-left">© 2026 — Credit by Ouroboros (Adrian)</div>
+  <body>
+    <div class="container">
+      <h1>🌤 Weather</h1>
 
-<div class="container">
-    <h1>🌤 Weather</h1>
-
-    <form method="POST">
-        <input id="kota" name="kota" placeholder="Masukkan kota..." autocomplete="off" required>
+      <form method="POST">
+        <input
+          id="kota"
+          name="kota"
+          placeholder="Masukkan kota..."
+          autocomplete="off"
+          required
+        />
         <ul id="suggestions"></ul>
         <button type="submit">Cek</button>
-    </form>
+      </form>
 
-    {% if cuaca %}
-        {% if cuaca.error %}
-            <p class="error">{{ cuaca.error }}</p>
-        {% else %}
-            <div class="result">
-                <p><strong>Kota:</strong> {{ cuaca.kota }}</p>
-                <p><strong>Suhu:</strong> {{ cuaca.temp }}°C</p>
-                <p><strong>Kondisi:</strong> {{ cuaca.weather }}</p>
-                <p><strong>Kelembapan:</strong> {{ cuaca.humidity }}%</p>
-            </div>
-        {% endif %}
-    {% endif %}
-</div>
+      {% if cuaca %} {% if cuaca.error %}
+      <p class="error">{{ cuaca.error }}</p>
+      {% else %}
+      <div class="result">
+        <p><strong>Kota:</strong> {{ cuaca.kota }}</p>
+        <p><strong>Suhu:</strong> {{ cuaca.temp }}°C</p>
+        <p><strong>Kondisi:</strong> {{ cuaca.weather }}</p>
+        <p><strong>Kelembapan:</strong> {{ cuaca.humidity }}%</p>
+      </div>
+      {% endif %} {% endif %}
+    </div>
 
-<script>
-const input = document.getElementById("kota");
-const suggestions = document.getElementById("suggestions");
+    <script>
+      const input = document.getElementById("kota");
+      const suggestions = document.getElementById("suggestions");
 
-input.addEventListener("input", async () => {
-    const query = input.value;
+      input.addEventListener("input", async () => {
+        const query = input.value;
 
-    if (query.length < 2) {
-        suggestions.innerHTML = "";
-        return;
-    }
+        if (query.length < 2) {
+          suggestions.innerHTML = "";
+          return;
+        }
 
-    try {
-        const res = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${query}&limit=5&appid=58b1f3086105a30639a60822d010dff5`);
-        const data = await res.json();
+        try {
+          const res = await fetch(`/api/suggestions?q=${query}`);
+          const data = await res.json();
 
-        suggestions.innerHTML = "";
+          suggestions.innerHTML = "";
 
-        data.forEach(city => {
+          data.forEach((city) => {
             const li = document.createElement("li");
             li.textContent = `${city.name}, ${city.country}`;
             li.onclick = () => {
-                input.value = city.name;
-                suggestions.innerHTML = "";
+              input.value = city.name;
+              suggestions.innerHTML = "";
             };
             suggestions.appendChild(li);
-        });
-    } catch (err) {
-        console.log(err);
-    }
-});
-</script>
-
-</body>
-</html> 
+          });
+        } catch (err) {
+          console.log(err);
+        }
+      });
+    </script>
+  </body>
+</html>

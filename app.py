@@ -8,6 +8,17 @@ app = Flask(__name__)
 
 api_pepet = os.getenv("WEATHER_API_KEY")
 
+@app.route('/api/suggestions')
+def suggestions():
+    query = request.args.get('q', '')
+    api_key = os.getenv("WEATHER_API_KEY")
+    
+    import requests
+    res = requests.get(f'https://api.openweathermap.org/geo/1.0/direct?q={query}&limit=5&appid={api_key}')
+    return jsonify(res.json())
+
+
+
 @app.route("/", methods=["GET", "POST"])
 def home():
     data_cuaca = None
